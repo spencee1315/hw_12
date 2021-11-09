@@ -398,3 +398,60 @@ updateEmployee = () => {
     });
   });
 };
+
+// function to update a manager role
+updateManager = () => {
+  // get employees from employee table
+  const employeeSql = `SELECT * FROM employee`;
+
+  connection.promise().query(employeeSql, (err, data) => {
+    if (err) throw err;
+  const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'name',
+        message: "Which employee would you like to update?",
+        choices: employees
+      }
+    ])
+     .then(empOption => {
+       const employee = empOption.name;
+       const params = [];
+       params.push(employee);
+
+       const managerSql = `SELECT * FROM employee`;
+
+       connection.promise().query(managerSql, (err, data) => {
+         if (err) throw err;
+        
+        const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+          inquirer.prompt([
+            {
+              type: 'list',
+              name: 'manager',
+              message: "What is the name of the employee's manager?"
+              choices: managers
+            }
+          ])
+           .then(managerOption => {
+             const manager = managerOption.manager;
+             params.push(manager);
+
+             let employee = params[0]
+             params[0] = manager
+             params[1] = employee
+             console.log(params)
+
+             const sql = `UPDATE employee SET manager_id = ? WHERE id = ?`;
+             connection.query(sql, params, (err, result) => {
+               if (err) throw err;
+               console.log("The employee information has been updated!");
+
+               showEmployees();
+             });
+           });
+       });
+     });
+  });
+};
