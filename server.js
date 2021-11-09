@@ -185,3 +185,35 @@ showEmployees = () => {
         });
       });
   };
+
+  // function to add a role
+  addRole = () => {
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'role',
+        message: "What role would you like to add?",
+        validate: addRole => {
+          if (addRole) {
+            return true;
+          } else {
+            console.log('Please add a role before continuing');
+            return false;
+          }
+        }
+      },
+      {
+        type: 'input',
+        name: 'salary',
+        message: "What is the salary of this role?",
+        validate: addSalary => {
+          if (isNaN(addSalary)) {
+            return true;
+          } else {
+            console.log('Please enter a salary before continuing');
+            return false;
+          }
+        }
+      }
+    ])
+  }
