@@ -179,7 +179,7 @@ showEmployees = () => {
         const sql = `INSERT INTO department (name) VALUES (?)`;
         connection.query(sql, answer.addDept, (err, result) => {
           if (err) throw err;
-          console.log( answer.addDept + " has been added to departments!");
+          console.log('Added ' + answer.addDept + " to departments!");
 
           showDepartments();
         });
@@ -216,4 +216,38 @@ showEmployees = () => {
         }
       }
     ])
-  }
+      .then(answer => {
+        const params = [answer.role, answer.salary];
+
+        // pull dept from department table
+        const roleSql = 'SELECT name, id FROM department';
+
+        connection.promise().query(roleSql, (err, data) => {
+          if (err) throw err;
+
+          const dept = data.map(({ name, id }) => ({ name: name, value: id }));
+
+          inquirer.prompt([
+            {
+              type: 'list',
+              name: 'dept',
+              message: "Which department is this role in?",
+              choices: dept
+            }
+          ])
+            .then(deptOption => {
+              const dept = deptOption.dept;
+              params.push(dept);
+
+              const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
+              connection.query(sql, params, (err, result) => {
+                if (err) throw err;
+                console.log('Added ' + answer.role + " to roles!");
+
+                showRoles();
+              });
+            });
+        });
+      });
+  };
+  
