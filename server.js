@@ -526,3 +526,31 @@ deleteRole = () => {
       });
   });
 };
+
+// function to delete employees
+deleteEmployee = () => {
+  // pull employees from employee table
+  const employeeSql = `SELECT * FROM employee`;
+  connection.promise().query(employeeSql, (err, data) => {
+    if (err) throw err;
+    const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'name',
+        message: "Please enter the name of the employee you would like to delete.",
+        choices: employees
+      }
+    ])
+      .then(empOption => {
+        const employee = empOption.name;
+        const sql = `DELETE FROM employee WHERE id = ?`;
+        connection.query(sql, employee, (err, result) => {
+          if (err) throw err;
+          console.log("The employee name entered has been successfully deleted!");
+
+          showEmployees();
+        });
+      });
+  });
+};
