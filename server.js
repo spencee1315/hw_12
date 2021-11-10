@@ -430,7 +430,7 @@ updateManager = () => {
             {
               type: 'list',
               name: 'manager',
-              message: "What is the name of the employee's manager?"
+              message: "What is the name of the employee's manager?",
               choices: managers
             }
           ])
