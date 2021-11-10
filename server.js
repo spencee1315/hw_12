@@ -471,3 +471,30 @@ employeeDepartment = () => {
     promptUser();
   });
 };
+
+// function to delete department
+deleteDepartment = () => {
+  const deptSql = `SELECT * FROM department`;
+  connection.promise().query(deptSql, (err, data) => {
+    if (err) throw err;
+    const dept = data.map(({ name, id }) => ({ name: name, value: id }));
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'dept',
+        message: "Please enter the name of the department you'd like to delete.",
+        choices: dept
+      }
+    ])
+      .then(deptOption => {
+        const dept = deptOption.dept;
+        const sql = `DELETE FROM department WHERE id = ?`;
+        connection.query(sql, dept, (err, result) => {
+          if (err) throw err;
+          console.log("The department has been successfully deleted!");
+
+          showDepartments();
+        });
+      });
+  });
+};
