@@ -84,7 +84,7 @@ const promptUser = () => {
               }
         
               if (choices === "View employees by department") {
-                employeeDepartment();
+                viewEmpDepartment();
               }
         
               if (choices === "Delete a department") {
@@ -100,7 +100,7 @@ const promptUser = () => {
               }
         
               if (choices === "View department budgets") {
-                viewBudget();
+                viewDeptBudget();
               }
         
               if (choices === "No Action") {
@@ -284,7 +284,7 @@ showEmployees = () => {
       .then(answer => {
       const params = [answer.firstName, answer.lastName]
 
-      // grab roles frm roles table
+      // pull roles frm roles table
       const roleSql = `SELECT role.id, role.title FROM role`;
 
       connection.promise().query(roleSql, (err, data) => {
@@ -341,7 +341,7 @@ showEmployees = () => {
 
   // function to update an employee 
 updateEmployee = () => {
-  // get employees from employee table 
+  // pull employees from employee table 
   const employeeSql = `SELECT * FROM employee`;
 
   connection.promise().query(employeeSql, (err, data) => {
@@ -401,7 +401,7 @@ updateEmployee = () => {
 
 // function to update a manager role
 updateManager = () => {
-  // get employees from employee table
+  // pull employees from employee table
   const employeeSql = `SELECT * FROM employee`;
 
   connection.promise().query(employeeSql, (err, data) => {
@@ -457,7 +457,7 @@ updateManager = () => {
 };
 
 // function to view employee by dept
-employeeDepartment = () => {
+viewEmpDepartment = () => {
   console.log('Displaying employee information by departments...\n');
   const sql = `SELECT employee.first_name,
                       employee.last_name,
