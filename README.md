@@ -9,27 +9,26 @@ For week 12 of the UW Coding Bootcamp my homework invited me to build a command-
 ## Built With
 
 * [JavaScript](https://www.javascript.com/)
-* [Express.js](https://expressjs.com/)
 * [Node.js](https://nodejs.org/en/)
-* [npm modules](https://www.npmjs.com/package/module)
-* [Developer Mozilla](https://developer.mozilla.org)
+* [Inquirer](https://www.npmjs.com/package/inquirer)
+* [mysql2](https://www.npmjs.com/package/mysql2)
+* [console.table](https://www.npmjs.com/package/console.table)
 
 ## Link to Site GitHub Repo
 
 * [Github Repo](https://github.com/spencee1315/hw_12)
 
-* Demo of working app via [Screencastify](https://drive.google.com/file/d/16lcG863_pduJfFHh_dnkUF3iTYux-496/view)
-<img src="public/assets/NoteTaker.png">
+* Demo of working app via [Screencastify](https://drive.google.com/file/d/1DPbdyFRElEfnic_uWUv0YaHEAJIzRyam/view)
 
 ## Installation 
 
-1. Clone or download repo via Github and install dependencies, this application requires Node.js, Inquirer, console.table and mysql2.
-2. To start application - run `npm start`
-3. To view database from MySQL `run mysql -u root -p`
+1. Clone or download repo via Github. Run `npm i` with the included `packages.json` file to install the required dependencies, this application requires Node.js, Inquirer, console.table and mysql2.
+2. To start application - run `node server.js`
+3. To view database from MySQL run `mysql -u root -p`
 
 ## Usage 
 
-Please view the demo above to view a walkthrough of the application. The specific functionality you will see is the ability for users to view, add, and edit information on employees, roles, departments, and managers.
+Please view the demo above to view a walkthrough of the application or follow the installation procedures above to go through the application yourself. The specific functionality you will see is the ability to view, add, edit, and delete information on employees, roles, departments, and managers. It also allows you to view department budget information.
 
 ## Tests
 
@@ -53,7 +52,7 @@ showDepartments = () => {
 ```
 
 ## License 
-This project is licensed under MIT
+This project is covered under the MIT license.
 
 ## Contributing 
 Contributors should read the installation section. 
