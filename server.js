@@ -11,12 +11,12 @@ require('dotenv').config()
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: process.env.MYSQL_PASSWORD,
+    password: process.env.DB_PASSWORD,
     database: 'employee_db'
 });
 
 // function after connection is established and welcome image shows
-afterConnection = () => {
+function afterConnection() {
     console.log("**********************")
     console.log("*                    *")
     console.log("*  Employee Manager  *")
@@ -114,7 +114,7 @@ showDepartments = () => {
     console.log('Showing all departments...\n');
     const sql = `SELECT department.id AS id, department.name AS department FROM department`;
 
-    connection.promise().query(sql, (err, rows) => {
+    connection.query(sql, (err, rows) => {
         if (err) throw err;
         console.table(rows);
         promptUser();
@@ -129,7 +129,7 @@ showRoles = () => {
                  FROM role
                  INNER JOIN department ON role.department_id = department.id`;
     
-    connection.promise().query(sql, (err, rows) => {
+    connection.query(sql, (err, rows) => {
       if (err) throw err; 
       console.table(rows); 
       promptUser();
@@ -151,7 +151,7 @@ showEmployees = () => {
                         LEFT JOIN department ON role.department_id = department.id
                         LEFT JOIN employee manager ON employee.manager_id = manager.id`;
   
-    connection.promise().query(sql, (err, rows) => {
+    connection.query(sql, (err, rows) => {
       if (err) throw err; 
       console.table(rows);
       promptUser();
@@ -207,7 +207,7 @@ showEmployees = () => {
         name: 'salary',
         message: "What is the salary of this role?",
         validate: addSalary => {
-          if (isNaN(addSalary)) {
+          if (!isNaN(addSalary)) {
             return true;
           } else {
             console.log('Please enter a salary before continuing');
@@ -222,7 +222,7 @@ showEmployees = () => {
         // pull dept from department table
         const roleSql = 'SELECT name, id FROM department';
 
-        connection.promise().query(roleSql, (err, data) => {
+        connection.query(roleSql, (err, data) => {
           if (err) throw err;
 
           const dept = data.map(({ name, id }) => ({ name: name, value: id }));
@@ -287,7 +287,7 @@ showEmployees = () => {
       // pull roles frm roles table
       const roleSql = `SELECT role.id, role.title FROM role`;
 
-      connection.promise().query(roleSql, (err, data) => {
+      connection.query(roleSql, (err, data) => {
         if (err) throw err;
 
         const roles = data.map(({ id, title }) => ({ name: title, value: id }));
@@ -305,7 +305,7 @@ showEmployees = () => {
 
            const managerSql = `SELECT * FROM employee`;
 
-           connection.promise().query(managerSql, (err, data) => {
+           connection.query(managerSql, (err, data) => {
              if (err) throw err;
 
              const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
@@ -344,7 +344,7 @@ updateEmployee = () => {
   // pull employees from employee table 
   const employeeSql = `SELECT * FROM employee`;
 
-  connection.promise().query(employeeSql, (err, data) => {
+  connection.query(employeeSql, (err, data) => {
     if (err) throw err; 
 
   const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
@@ -364,7 +364,7 @@ updateEmployee = () => {
 
         const roleSql = `SELECT * FROM role`;
 
-        connection.promise().query(roleSql, (err, data) => {
+        connection.query(roleSql, (err, data) => {
           if (err) throw err; 
 
           const roles = data.map(({ id, title }) => ({ name: title, value: id }));
@@ -404,7 +404,7 @@ updateManager = () => {
   // pull employees from employee table
   const employeeSql = `SELECT * FROM employee`;
 
-  connection.promise().query(employeeSql, (err, data) => {
+  connection.query(employeeSql, (err, data) => {
     if (err) throw err;
   const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
     inquirer.prompt([
@@ -422,7 +422,7 @@ updateManager = () => {
 
        const managerSql = `SELECT * FROM employee`;
 
-       connection.promise().query(managerSql, (err, data) => {
+       connection.query(managerSql, (err, data) => {
          if (err) throw err;
         
         const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
@@ -475,7 +475,7 @@ viewEmpDepartment = () => {
 // function to delete department
 deleteDepartment = () => {
   const deptSql = `SELECT * FROM department`;
-  connection.promise().query(deptSql, (err, data) => {
+  connection.query(deptSql, (err, data) => {
     if (err) throw err;
     const dept = data.map(({ name, id }) => ({ name: name, value: id }));
     inquirer.prompt([
@@ -502,7 +502,7 @@ deleteDepartment = () => {
 // function to delete role
 deleteRole = () => {
   const roleSql = `SELECT * FROM role`;
-  connection.promise().query(roleSql, (err, data) => {
+  connection.query(roleSql, (err, data) => {
     if (err) throw err;
     const role = data.map(({ title, id}) => ({ name: title, value: id }));
     inquirer.prompt([
@@ -531,7 +531,7 @@ deleteRole = () => {
 deleteEmployee = () => {
   // pull employees from employee table
   const employeeSql = `SELECT * FROM employee`;
-  connection.promise().query(employeeSql, (err, data) => {
+  connection.query(employeeSql, (err, data) => {
     if (err) throw err;
     const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
     inquirer.prompt([
@@ -563,10 +563,12 @@ viewDeptBudget = () => {
                       SUM(salary) AS budget
                 FROM role
                 JOIN department ON role.department_id = department.id GROUP BY department_id`;
-  connection.promise().query(sql, (err, rows) => {
+  connection.query(sql, (err, rows) => {
     if (err) throw err;
     console.table(rows);
 
     promptUser();
   });
 };
+
+afterConnection();
